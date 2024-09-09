@@ -1,0 +1,23 @@
+version: '3.9'
+
+services:
+  localstack:
+    image: localstack/localstack:latest
+    container_name: localstack
+    environment:
+      - SERVICES=sqs,sns      # Especifica os serviços SQS e SNS
+      - DEFAULT_REGION=us-east-1
+      - EDGE_PORT=4566
+    ports:
+      - "4566:4566"            # Porta principal para a API LocalStack
+      - "4576:4576"            # Porta específica para SQS (opcional)
+    volumes:
+      - "./localstack:/var/lib/localstack"  # Volume para persistência dos dados
+    networks:
+      - localstack-network
+
+networks:
+  localstack-network:
+    driver: bridge
+
+    # aws --endpoint-url=http://localhost:4566 sqs create-queue --queue-name fila
